@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Down Syndrome Awareness: A Student Website</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--yellow:#FFD93D;--orange:#FF6B6B;--blue:#4D96FF;--green:#6BCB77;--purple:#C77DFF;--pink:#FF9EBB;--dark:#1a1a2e;--cream:#FFFDF4;--text:#2d2d2d;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+    #particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.4;}
+    .cursor-dot{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:1000;background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+    .nav-brand{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.4rem;letter-spacing:1px;animation:slideInLeft 0.6s ease both;}
+    @keyframes slideInLeft{from{opacity:0;transform:translateX(-20px);}to{opacity:1;transform:translateX(0);}}
+    .nav-links{display:flex;gap:0.4rem;list-style:none;}
+    .nav-links a{display:inline-block;padding:0.4rem 1rem;border-radius:30px;color:#fff;text-decoration:none;font-weight:700;font-size:0.9rem;transition:transform 0.25s cubic-bezier(.34,1.56,.64,1),box-shadow 0.2s;position:relative;overflow:hidden;}
+    .nav-links a:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+    .nav-links li:nth-child(1) a{background:var(--orange);}
+    .nav-links li:nth-child(2) a{background:var(--blue);}
+    .nav-links li:nth-child(3) a{background:var(--green);}
+    .nav-links li:nth-child(4) a{background:var(--purple);}
+
+    /* PAGES */
+    .page{display:none;position:relative;z-index:1;}
+    .page.active{display:block;animation:pageIn 0.5s cubic-bezier(.22,1,.36,1) both;}
+    @keyframes pageIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+    /* HERO */
+    .hero{background:linear-gradient(135deg,var(--yellow),var(--orange),var(--pink));background-size:300% 300%;animation:gradShift 8s ease infinite;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+    @keyframes gradShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:0.25;animation:blobMove 7s ease-in-out infinite alternate;}
+    .blob1{width:320px;height:320px;background:var(--yellow);top:-100px;left:-80px;animation-delay:0s;}
+    .blob2{width:260px;height:260px;background:var(--pink);top:30px;right:-50px;animation-delay:2.5s;}
+    .blob3{width:200px;height:200px;background:white;bottom:-50px;left:40%;animation-delay:5s;}
+    @keyframes blobMove{from{transform:scale(1) translate(0,0);}to{transform:scale(1.15) translate(15px,-15px);}}
+    .deco{position:absolute;font-size:3rem;opacity:0.1;z-index:0;animation:decoFloat 5s ease-in-out infinite alternate;}
+    .deco:nth-child(5){top:8%;left:4%;animation-delay:0s;}
+    .deco:nth-child(6){top:15%;right:7%;animation-delay:1.2s;font-size:2.2rem;}
+    .deco:nth-child(7){bottom:12%;left:10%;animation-delay:2.5s;font-size:2.6rem;}
+    .deco:nth-child(8){bottom:8%;right:4%;animation-delay:0.8s;font-size:3.5rem;}
+    @keyframes decoFloat{from{transform:translateY(0) rotate(0deg);}to{transform:translateY(-18px) rotate(12deg);}}
+    .hero-badge{display:inline-block;background:var(--dark);color:var(--yellow);font-family:'Fredoka One',cursive;padding:0.4rem 1.4rem;border-radius:30px;font-size:1rem;margin-bottom:1.5rem;letter-spacing:1px;animation:badgePop 0.7s cubic-bezier(.34,1.56,.64,1) 0.2s both;position:relative;z-index:2;}
+    @keyframes badgePop{from{opacity:0;transform:scale(0.4);}to{opacity:1;transform:scale(1);}}
+    .hero h1{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,6vw,4.5rem);color:var(--dark);line-height:1.1;margin-bottom:1rem;text-shadow:3px 3px 0 rgba(255,255,255,0.4);position:relative;z-index:2;animation:heroUp 0.8s cubic-bezier(.22,1,.36,1) 0.4s both;}
+    @keyframes heroUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .hero p{font-size:1.2rem;color:var(--dark);max-width:600px;margin:0 auto;font-weight:700;opacity:0.85;position:relative;z-index:2;animation:fadeIn 0.8s ease 0.8s both;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:0.85;}}
+
+    /* SCROLL REVEAL */
+    .reveal,.reveal-l,.reveal-r{opacity:0;transition:opacity 0.7s ease,transform 0.7s cubic-bezier(.22,1,.36,1);}
+    .reveal{transform:translateY(36px);}
+    .reveal-l{transform:translateX(-36px);}
+    .reveal-r{transform:translateX(36px);}
+    .reveal.vis,.reveal-l.vis,.reveal-r.vis{opacity:1;transform:translate(0);}
+
+    /* STAGGER */
+    .stagger .card{opacity:0;transform:translateY(28px);}
+    .stagger.vis .card{animation:staggerUp 0.6s cubic-bezier(.22,1,.36,1) forwards;}
+    .stagger.vis .card:nth-child(1){animation-delay:0.05s;}
+    .stagger.vis .card:nth-child(2){animation-delay:0.15s;}
+    .stagger.vis .card:nth-child(3){animation-delay:0.25s;}
+    .stagger.vis .card:nth-child(4){animation-delay:0.35s;}
+    @keyframes staggerUp{to{opacity:1;transform:translateY(0);}}
+
+    /* SECTION HEADER */
+    .sh{display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;position:relative;}
+    .sh::after{content:'';position:absolute;bottom:-6px;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--purple));border-radius:3px;transition:width 0.9s ease;}
+    .sh.vis::after{width:100%;}
+    .sh .icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);}
+    .sh:hover .icon{transform:rotate(18deg) scale(1.12);}
+    .sh h2{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--dark);}
+
+    .container{max-width:960px;margin:0 auto;padding:3rem 2rem;position:relative;z-index:1;}
+
+    /* CARDS */
+    .card{background:#fff;border-radius:20px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.07);border-left:6px solid var(--blue);position:relative;overflow:hidden;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s;}
+    .card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:0 20px 0 80px;opacity:0.08;transition:transform 0.4s ease;}
+    .card:hover{transform:translateY(-7px) scale(1.01);box-shadow:0 20px 50px rgba(0,0,0,0.13);}
+    .card:hover::before{transform:scale(1.6);}
+    .card::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.28),transparent);transform:skewX(-20deg);transition:left 0.55s ease;pointer-events:none;}
+    .card:hover::after{left:150%;}
+    .card.orange{border-left-color:var(--orange);}.card.orange::before{background:var(--orange);}
+    .card.green{border-left-color:var(--green);}.card.green::before{background:var(--green);}
+    .card.purple{border-left-color:var(--purple);}.card.purple::before{background:var(--purple);}
+    .card.yellow{border-left-color:var(--yellow);}.card.yellow::before{background:var(--yellow);}
+    .card.pink{border-left-color:var(--pink);}.card.pink::before{background:var(--pink);}
+    .card.blue::before{background:var(--blue);}
+    .card h3{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:0.8rem;color:var(--dark);}
+    .card p,.card li{line-height:1.8;font-size:1rem;}
+    .card ul{padding-left:1.4rem;}.card li{margin-bottom:0.4rem;}
+
+    /* STAT PILLS */
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1.5rem 0;}
+    .stat-pill{border-radius:16px;padding:1.4rem 1rem;text-align:center;color:white;position:relative;overflow:hidden;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s;}
+    .stat-pill::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.18) 0%,transparent 60%);animation:spin 4s linear infinite;}
+    @keyframes spin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+    .stat-pill:hover{transform:translateY(-9px) scale(1.05);box-shadow:0 22px 44px rgba(0,0,0,0.22);}
+    .stat-pill .number{font-family:'Fredoka One',cursive;font-size:2.2rem;display:block;line-height:1;margin-bottom:0.4rem;position:relative;z-index:1;}
+    .stat-pill .label{font-size:0.88rem;font-weight:700;opacity:0.92;position:relative;z-index:1;}
+
+    /* PUNNETT */
+    .punnett-wrapper{display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;margin:1rem 0;}
+    .punnett-table{border-collapse:collapse;font-family:'Nunito',sans-serif;font-weight:800;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+    .punnett-table th,.punnett-table td{width:70px;height:70px;text-align:center;vertical-align:middle;font-size:1.1rem;border:2px solid rgba(255,255,255,0.6);transition:transform 0.2s,filter 0.2s;}
+    .punnett-table td:hover{transform:scale(1.12);filter:brightness(1.12);z-index:1;position:relative;}
+    .punnett-table th{background:var(--dark);color:var(--yellow);font-size:1.2rem;}
+    .punnett-table .normal{background:#6BCB77;color:#fff;}
+    .punnett-table .carrier{background:#4D96FF;color:#fff;}
+    .punnett-table .affected{background:#FF6B6B;color:#fff;}
+    .punnett-legend{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.6rem;}
+    .legend-item{display:flex;align-items:center;gap:0.4rem;font-size:0.85rem;font-weight:700;}
+    .legend-dot{width:14px;height:14px;border-radius:50%;}
+
+    /* KARYOTYPE */
+    .karyotype-diagram{background:#1a1a2e;border-radius:16px;padding:1.5rem;color:white;text-align:center;}
+    .karyotype-diagram h4{font-family:'Fredoka One',cursive;color:var(--yellow);margin-bottom:1rem;font-size:1.1rem;}
+    .karyotype-note{font-size:0.85rem;color:rgba(255,255,255,0.7);margin-top:0.8rem;}
+    @keyframes chromoPop{from{transform:scaleY(0);opacity:0;}to{transform:scaleY(1);opacity:1;}}
+    @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,217,61,0.8);}50%{opacity:0.65;box-shadow:0 0 0 8px rgba(255,217,61,0);}}
+
+    /* TAGS */
+    .tag-cloud{display:flex;flex-wrap:wrap;gap:0.5rem;margin:0.8rem 0;}
+    .tag{padding:0.35rem 0.9rem;border-radius:20px;font-size:0.85rem;font-weight:800;color:white;transition:transform 0.25s cubic-bezier(.34,1.56,.64,1),box-shadow 0.2s;display:inline-block;animation:tagPop 0.4s cubic-bezier(.34,1.56,.64,1) both;}
+    .tag:hover{transform:scale(1.14) rotate(-2deg);box-shadow:0 5px 15px rgba(0,0,0,0.22);}
+    @keyframes tagPop{from{opacity:0;transform:scale(0.5);}to{opacity:1;transform:scale(1);}}
+
+    /* TIMELINE */
+    .timeline{position:relative;padding-left:2rem;}
+    .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--orange),var(--purple));border-radius:3px;}
+    .timeline-item{position:relative;margin-bottom:1.5rem;}
+    .timeline-item::before{content:'';position:absolute;left:-2rem;top:6px;width:14px;height:14px;border-radius:50%;background:var(--orange);border:3px solid white;box-shadow:0 0 0 3px var(--orange);transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s;}
+    .timeline-item:hover::before{transform:scale(1.6);box-shadow:0 0 0 8px rgba(255,107,107,0.25);}
+    .timeline-item h4{font-weight:800;color:var(--dark);margin-bottom:0.3rem;}
+    .timeline-item p{font-size:0.95rem;color:#555;line-height:1.7;}
+
+    /* QUOTE */
+    .quote-box{background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:20px;padding:2rem;color:white;position:relative;margin:1.5rem 0;overflow:hidden;}
+    .quote-box::before{content:'"';font-family:'Fredoka One',cursive;font-size:6rem;position:absolute;top:-1.5rem;left:1rem;opacity:0.2;line-height:1;}
+    .sparkle{position:absolute;animation:sparklePop 2.2s ease-in-out infinite;}
+    .sparkle:nth-child(2){top:10%;right:14%;animation-delay:0.4s;font-size:1.3rem;}
+    .sparkle:nth-child(3){bottom:14%;right:7%;animation-delay:1.1s;font-size:1rem;}
+    .sparkle:nth-child(4){top:55%;right:22%;animation-delay:1.8s;font-size:0.8rem;}
+    @keyframes sparklePop{0%,100%{opacity:0;transform:scale(0) rotate(0deg);}50%{opacity:1;transform:scale(1) rotate(180deg);}}
+    .quote-box p{font-size:1.15rem;font-weight:700;line-height:1.7;position:relative;z-index:1;}
+    .quote-box .attribution{margin-top:0.8rem;font-size:0.9rem;opacity:0.8;font-weight:800;}
+
+    /* STORY HERO */
+    .story-hero{background:linear-gradient(135deg,var(--green),var(--blue));border-radius:20px;padding:2.5rem;color:white;margin-bottom:1.5rem;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden;}
+    .story-hero::after{content:'⭐';position:absolute;font-size:8rem;right:-1rem;bottom:-2rem;opacity:0.08;animation:decoFloat 5s ease-in-out infinite alternate;}
+    .story-avatar{width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:3.5rem;flex-shrink:0;border:4px solid rgba(255,255,255,0.5);animation:bob 3s ease-in-out infinite alternate;}
+    @keyframes bob{from{transform:translateY(0);}to{transform:translateY(-9px);}}
+    .story-hero h3{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:0.4rem;}
+    .story-hero p{font-size:0.95rem;opacity:0.9;line-height:1.7;}
+
+    /* BANNERS */
+    .page-banner{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden;}
+    .page-banner h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3.5rem);color:white;text-shadow:2px 2px 0 rgba(0,0,0,0.15);margin-bottom:0.6rem;position:relative;z-index:1;animation:heroUp 0.7s cubic-bezier(.22,1,.36,1) both;}
+    .page-banner p{color:rgba(255,255,255,0.9);font-size:1.1rem;font-weight:700;max-width:550px;margin:0 auto;position:relative;z-index:1;}
+    .banner-p2{background:linear-gradient(135deg,var(--blue),var(--purple));background-size:300% 300%;animation:gradShift 8s ease infinite;}
+    .banner-p3{background:linear-gradient(135deg,var(--green),var(--blue));background-size:300% 300%;animation:gradShift 8s ease infinite;}
+    .banner-p4{background:linear-gradient(135deg,var(--purple),var(--pink));background-size:300% 300%;animation:gradShift 8s ease infinite;}
+
+    /* SOURCES */
+    .source-card{background:#fff;border-radius:14px;padding:1.2rem 1.5rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:5px solid var(--blue);display:flex;gap:1rem;align-items:flex-start;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1),box-shadow 0.3s;}
+    .source-card:hover{transform:translateX(7px);box-shadow:0 8px 28px rgba(0,0,0,0.12);}
+    .source-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1rem;color:white;flex-shrink:0;}
+    .source-card p{font-size:0.92rem;line-height:1.7;}
+    .source-card a{color:var(--blue);word-break:break-all;font-weight:700;}
+
+    /* RIPPLE */
+    .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.35);transform:scale(0);animation:rippleAnim 0.65s linear;pointer-events:none;}
+    @keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
+
+    footer{background:var(--dark);color:rgba(255,255,255,0.6);text-align:center;padding:2rem;font-size:0.85rem;font-weight:600;position:relative;z-index:1;}
+    footer span{color:var(--yellow);}
+
+    @media(max-width:640px){.nav-links a{padding:0.35rem 0.6rem;font-size:0.8rem;}.nav-brand{font-size:1rem;}.punnett-table th,.punnett-table td{width:55px;height:55px;font-size:0.95rem;}}
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+<div id="cursorWrap"></div>
+
+<nav>
+  <div class="nav-brand">🧬 Down Syndrome</div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('p1')">📖 Overview</a></li>
+    <li><a href="#" onclick="showPage('p2')">🩺 Symptoms &amp; Treatment</a></li>
+    <li><a href="#" onclick="showPage('p3')">👤 Real Stories</a></li>
+    <li><a href="#" onclick="showPage('p4')">📚 Works Cited</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE 1 -->
+<div id="p1" class="page active">
+  <div class="hero">
+    <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
+    <div class="deco">🧬</div><div class="deco">🔬</div><div class="deco">🧪</div><div class="deco">🫀</div>
+    <div class="hero-badge">Option A: Genetic Disorder</div>
+    <h1>Understanding<br>Down Syndrome</h1>
+    <p>A complete guide to Trisomy 21, its science, how it is inherited, and the people it affects.</p>
+  </div>
+
+  <div class="container">
+    <div class="sh reveal"><div class="icon" style="background:#FFE5D0;">📋</div><h2>What Is Down Syndrome?</h2></div>
+    <div class="stagger">
+      <div class="card orange"><h3>Full Name and Alternate Names</h3><p>Down Syndrome is also known as <strong>Trisomy 21</strong>. In the UK, people sometimes write it as "Down's Syndrome." The condition is named after <strong>John Langdon Down</strong>, an English doctor who first described it in 1866. Scientists did not figure out the actual genetic cause until 1959, when they discovered that people with Down Syndrome have an extra copy of chromosome 21.</p></div>
+      <div class="card blue"><h3>What Goes Wrong in the Body?</h3><p>Normally, every cell in the human body has <strong>46 chromosomes</strong> organized into 23 pairs. In Down Syndrome, a person has <strong>47 chromosomes</strong> because there is one extra copy of chromosome 21. That extra chromosome causes a lot of genes to be "turned on" at higher levels than normal, which messes up how the brain and body grow during development. Basically, the body gets too much information from chromosome 21 and does not know how to handle it all.</p></div>
+    </div>
+
+    <div class="card green reveal">
+      <h3>🔬 Karyotype Diagram: Visualizing the Extra Chromosome</h3>
+      <div class="karyotype-diagram">
+        <h4>Human Karyotype: Down Syndrome (Trisomy 21)</h4>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:1rem;">Each pair represents a chromosome pair. Pair 21 shows THREE chromosomes instead of two.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:12px;">
+          <div style="display:flex;gap:3px;align-items:flex-end;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:36px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.1s both;"></div><div style="width:10px;height:36px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.15s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">1</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:32px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.2s both;"></div><div style="width:10px;height:32px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.25s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">2</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:28px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.3s both;"></div><div style="width:10px;height:28px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.35s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">3</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:26px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.4s both;"></div><div style="width:10px;height:26px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.45s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">4</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:25px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.5s both;"></div><div style="width:10px;height:25px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.55s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">5</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:24px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.6s both;"></div><div style="width:10px;height:24px;background:#4D96FF;border-radius:3px;animation:chromoPop 0.4s 0.65s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">6</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:23px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.7s both;"></div><div style="width:10px;height:23px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.75s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">7</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:22px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.8s both;"></div><div style="width:10px;height:22px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.85s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">8</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:21px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.9s both;"></div><div style="width:10px;height:21px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 0.95s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">9</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:20px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.0s both;"></div><div style="width:10px;height:20px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.05s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">10</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:19px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.1s both;"></div><div style="width:10px;height:19px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.15s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">11</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:18px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.2s both;"></div><div style="width:10px;height:18px;background:#6BCB77;border-radius:3px;animation:chromoPop 0.4s 1.25s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">12</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:17px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.3s both;"></div><div style="width:10px;height:17px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.35s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">13</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:16px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.4s both;"></div><div style="width:10px;height:16px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.45s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">14</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:15px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.5s both;"></div><div style="width:10px;height:15px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.55s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">15</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:14px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.6s both;"></div><div style="width:10px;height:14px;background:#C77DFF;border-radius:3px;animation:chromoPop 0.4s 1.65s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">16</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:13px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.7s both;"></div><div style="width:10px;height:13px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.75s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">17</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:13px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.8s both;"></div><div style="width:10px;height:13px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.85s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">18</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:12px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.9s both;"></div><div style="width:10px;height:12px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 1.95s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">19</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:12px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 2.0s both;"></div><div style="width:10px;height:12px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 2.05s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">20</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:10px;background:#FF6B6B;border-radius:3px;animation:chromoPop 0.4s 2.1s both;"></div><div style="width:10px;height:10px;background:#FF6B6B;border-radius:3px;animation:chromoPop 0.4s 2.15s both;"></div><div style="width:10px;height:10px;background:#FFD93D;border-radius:3px;border:2px solid white;animation:pulse 1.5s infinite,chromoPop 0.4s 2.3s both;"></div></div><span style="font-size:0.5rem;color:#FFD93D;font-weight:900;">21 ⚠️</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:10px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 2.2s both;"></div><div style="width:10px;height:10px;background:#FF9EBB;border-radius:3px;animation:chromoPop 0.4s 2.25s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">22</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="display:flex;gap:1px;"><div style="width:10px;height:20px;background:#FFD93D;border-radius:3px;animation:chromoPop 0.4s 2.35s both;"></div><div style="width:10px;height:12px;background:#FFD93D;border-radius:3px;animation:chromoPop 0.4s 2.4s both;"></div></div><span style="font-size:0.5rem;color:rgba(255,255,255,0.5);">XY</span></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;"><div style="width:12px;height:12px;background:#4D96FF;border-radius:3px;"></div>Normal Pairs</div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;"><div style="width:12px;height:12px;background:#FF6B6B;border-radius:3px;"></div>Chromosome 21</div>
+          <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;"><div style="width:12px;height:12px;background:#FFD93D;border-radius:3px;border:2px solid white;"></div>Extra Chr. 21 (Trisomy!)</div>
+        </div>
+        <p class="karyotype-note">In Trisomy 21, chromosome pair 21 has THREE copies instead of two. That extra chromosome is what causes Down Syndrome. The yellow blinking one is the extra copy.</p>
+      </div>
+      <p style="margin-top:0.8rem;font-size:0.8rem;color:#777;"><em>Caption: A simplified karyotype diagram showing chromosomes 1 to 22 and sex chromosomes. Chromosome 21 appears three times (highlighted in red and yellow), representing Trisomy 21. Image created for educational purposes.</em></p>
+    </div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#E8F4FD;">🔀</div><h2>The Three Types of Down Syndrome</h2></div>
+    <div class="stagger">
+      <div class="card orange"><h3>Type 1: Trisomy 21 (95% of cases)</h3><p>This is by far the most common form. When an egg or sperm is being formed, chromosome 21 does not separate correctly. This is called <strong>nondisjunction</strong>. Because of that mistake, one reproductive cell ends up with two copies of chromosome 21 instead of one. When that cell joins with a normal cell during fertilization, the baby ends up with three copies of chromosome 21 in every cell of their body.</p></div>
+      <div class="card blue"><h3>Type 2: Translocation Down Syndrome (about 4% of cases)</h3><p>In this type, an extra piece of chromosome 21 breaks off and sticks to a different chromosome (usually chromosome 14). The person might still have 46 total chromosomes, but that extra chunk of chromosome 21 is still there causing problems. This is the only type that can actually be passed down from a parent. A parent can be a "balanced translocation carrier," which means they carry the rearranged chromosome but do not have Down Syndrome themselves.</p></div>
+      <div class="card purple"><h3>Type 3: Mosaic Down Syndrome (about 1 to 2% of cases)</h3><p>Mosaic Down Syndrome is a little different because only <em>some</em> of the body's cells have the extra chromosome 21. Other cells are totally normal. This happens when the cell division error occurs after the egg is already fertilized, during early development. People with mosaic Down Syndrome often have milder symptoms because not every cell in their body is affected.</p></div>
+    </div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#FFF0F6;">🧩</div><h2>Mode of Inheritance</h2></div>
+    <div class="card pink reveal"><h3>Chromosomal Error: Nondisjunction</h3><p>Down Syndrome is not inherited the same way that most genetic conditions are. It is not dominant or recessive. Instead, it happens because of a <strong>chromosomal error</strong> called nondisjunction. This is when chromosomes fail to pull apart correctly during meiosis, which is the process the body uses to make eggs and sperm. This is not caused by anything the parents did. It just happens randomly. The one thing that does increase the risk is the age of the mother.</p><br><p>Here is how the risk goes up with maternal age:</p><ul style="margin-top:0.5rem;"><li>Age 20: approximately 1 in 1,500 chance</li><li>Age 30: approximately 1 in 800 chance</li><li>Age 35: approximately 1 in 270 chance</li><li>Age 40: approximately 1 in 100 chance</li><li>Age 45: approximately 1 in 30 chance</li></ul></div>
+
+    <div class="card yellow reveal"><h3>📊 How Nondisjunction Happens: Step by Step</h3><div class="timeline"><div class="timeline-item"><h4>Step 1: Normal Meiosis Begins</h4><p>A cell in the body starts dividing to make either an egg or a sperm. Normally, each pair of chromosomes lines up and then splits apart so that one copy goes to each new cell.</p></div><div class="timeline-item"><h4>Step 2: Nondisjunction Happens</h4><p>With nondisjunction, chromosome 21 does not split apart the way it should. Instead of one copy going to each new cell, both copies end up in the same cell. The other new cell ends up with zero copies of chromosome 21.</p></div><div class="timeline-item"><h4>Step 3: An Egg or Sperm With Two Copies of Chromosome 21</h4><p>The egg or sperm that got both copies now has 24 chromosomes instead of the normal 23. That is one extra chromosome 21.</p></div><div class="timeline-item"><h4>Step 4: Fertilization Creates Trisomy 21</h4><p>When that egg or sperm joins with a normal one during fertilization, the result is a cell with 47 chromosomes total. Three of those are chromosome 21. That is what we call Trisomy 21, also known as Down Syndrome.</p></div></div></div>
+
+    <div class="card green reveal"><h3>📋 Translocation Inheritance: Punnett Square Example</h3><p style="margin-bottom:1rem;">For Translocation Down Syndrome, one parent can be a carrier. Here is what the chances look like when one parent is a translocation carrier:</p><div class="punnett-wrapper"><div><table class="punnett-table"><tr><th></th><th>T (trans.)</th><th>N (normal)</th></tr><tr><th>N (normal)</th><td class="carrier">TN<br><small>Carrier</small></td><td class="normal">NN<br><small>Normal</small></td></tr><tr><th>N (normal)</th><td class="affected">T+N<br><small>Down Syn.</small></td><td class="normal">NN<br><small>Normal</small></td></tr></table><div class="punnett-legend" style="margin-top:0.8rem;"><div class="legend-item"><div class="legend-dot" style="background:#6BCB77;"></div>Unaffected (50%)</div><div class="legend-item"><div class="legend-dot" style="background:#4D96FF;"></div>Carrier (25%)</div><div class="legend-item"><div class="legend-dot" style="background:#FF6B6B;"></div>Down Syndrome (25%)</div></div></div><div style="flex:1;min-width:200px;"><p style="font-size:0.95rem;line-height:1.8;"><strong>Key:</strong> T stands for the translocation chromosome and N stands for a normal chromosome. Each pregnancy has roughly a 1 in 4 chance of resulting in Down Syndrome, though the exact odds can vary depending on which chromosomes are involved.</p></div></div></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#EEF2FF;">🧪</div><h2>Genes and Proteins Affected</h2></div>
+    <div class="card blue reveal"><h3>Which Genes Are Overexpressed?</h3><p>Chromosome 21 has over <strong>200 protein-coding genes</strong> on it. When you have an extra copy of that chromosome, all of those genes get overproduced at about 1.5 times their normal level. Some of the most important ones include:</p><ul style="margin-top:0.8rem;"><li><strong>DYRK1A</strong>: Helps control brain development. Overexpression contributes to intellectual disability and higher Alzheimer's risk</li><li><strong>HMGN1</strong>: Affects how other genes are regulated throughout the body</li><li><strong>COL6A1</strong>: Involved in heart development. Too much of it is linked to congenital heart defects</li><li><strong>SOD1</strong>: An antioxidant gene. Having too much of it might speed up the aging process</li><li><strong>APP</strong>: Makes amyloid precursor protein. Having too much is the main reason adults with DS develop Alzheimer's at such high rates</li></ul></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#F0FFF4;">📈</div><h2>Prognosis and Life Expectancy</h2></div>
+    <div class="stat-grid reveal">
+      <div class="stat-pill" style="background:var(--orange);"><span class="number counter" data-target="60">0</span><span class="label">Average life expectancy today (years)</span></div>
+      <div class="stat-pill" style="background:var(--blue);"><span class="number">10</span><span class="label">Average life expectancy in 1960 (years)</span></div>
+      <div class="stat-pill" style="background:var(--green);"><span class="number">50%</span><span class="label">Born with a heart defect</span></div>
+      <div class="stat-pill" style="background:var(--purple);"><span class="number counter" data-target="57">0</span><span class="label">% of DS adults who are employed</span></div>
+    </div>
+    <div class="card green reveal"><h3>Is It Life-Threatening?</h3><p>Down Syndrome on its own is not immediately life-threatening, but some of the conditions that come along with it can be serious if they are not treated. About 50% of people with Down Syndrome are born with <strong>congenital heart defects</strong>, which used to be really dangerous before modern medicine. Today, most of those heart conditions can be fixed with surgery. Life expectancy has gone way up over the years. In 1960, the average person with Down Syndrome only lived to about 10 years old. Today, the average is close to <strong>60 years</strong>. Some people with Down Syndrome go to college, hold jobs, and live on their own or with minimal support. Others need more help with daily life. It really depends on the individual.</p></div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="p2" class="page">
+  <div class="page-banner banner-p2"><h1>🩺 Symptoms, Diagnosis and Treatment</h1><p>What does Down Syndrome look like, how is it found, and what can doctors do about it?</p></div>
+  <div class="container">
+    <div class="sh reveal"><div class="icon" style="background:#E8F4FD;">🔍</div><h2>Symptoms Present at Birth</h2></div>
+    <div class="card orange reveal"><h3>Physical Features (Visible at Birth)</h3><div class="tag-cloud"><span class="tag" style="background:var(--orange);">Flattened face</span><span class="tag" style="background:var(--blue);">Almond-shaped eyes</span><span class="tag" style="background:var(--green);">Small ears</span><span class="tag" style="background:var(--purple);">Short neck</span><span class="tag" style="background:var(--pink);">Low muscle tone</span><span class="tag" style="background:var(--orange);">Single palmar crease</span><span class="tag" style="background:var(--blue);">Short fingers</span><span class="tag" style="background:var(--green);">Protruding tongue</span><span class="tag" style="background:var(--purple);">Small head</span><span class="tag" style="background:var(--pink);">Short stature</span><span class="tag" style="background:var(--orange);">Brushfield spots</span><span class="tag" style="background:var(--blue);">Extra space between toes</span></div><p style="margin-top:0.8rem;">Doctors can usually spot signs of Down Syndrome right when a baby is born based on how they look. But a blood test called a karyotype test is always needed to actually confirm the diagnosis.</p></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#FFF0F6;">⏳</div><h2>Symptoms That Develop Over Time</h2></div>
+    <div class="stagger">
+      <div class="card purple"><h3>Neurological and Cognitive</h3><ul><li><strong>Intellectual disability</strong>: mild to moderate. This affects how fast someone learns, not whether they can learn</li><li><strong>Speech and language delays</strong>: most kids with DS do eventually develop solid communication skills, just on a slower timeline</li><li><strong>Shorter attention span</strong> and some difficulty with abstract thinking or problem-solving</li><li><strong>Early-onset Alzheimer's disease</strong>: by around age 40, nearly all people with DS start showing Alzheimer's-related changes in the brain. This is because the APP gene on chromosome 21 gets overproduced</li><li><strong>Down Syndrome Regression Disorder (DSRD)</strong>: a sudden and unexpected regression in behavior and mental function, mostly seen in teenagers. Researchers think it may be linked to the immune system</li></ul></div>
+      <div class="card blue"><h3>Internal and Medical Conditions</h3><ul><li><strong>Congenital heart defects</strong>: about half of all people with DS are born with a heart problem. The most common one is called atrioventricular septal defect (AVSD)</li><li><strong>Gastrointestinal issues</strong>: things like duodenal atresia, celiac disease, and acid reflux</li><li><strong>Thyroid problems</strong>: hypothyroidism (an underactive thyroid) is really common in people with DS</li><li><strong>Obstructive sleep apnea</strong>: caused by the shape of the airways</li><li><strong>Leukemia</strong>: people with DS are 10 to 20 times more likely to get leukemia than the general population</li><li><strong>Hearing and vision problems</strong>: including cataracts, eye crossing (strabismus), and hearing loss</li><li><strong>Atlantoaxial instability</strong>: this is when the joints at the top of the spine are a little too loose, which can be dangerous</li><li><strong>Frequent infections</strong>: the immune system works a little differently in people with DS, so they get sick more often</li></ul></div>
+      <div class="card green"><h3>Psychological and Behavioral</h3><ul><li>Adults with DS have higher rates of <strong>anxiety and depression</strong></li><li>Between 8 and 18% of people with Down Syndrome also have <strong>Autism Spectrum Disorder (ASD)</strong></li><li>Many people with DS are known for being very social, warm, and motivated</li><li>As adults become more aware of their differences, they can be more at risk for <strong>depression</strong></li></ul></div>
+    </div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#FEFCE8;">🧬</div><h2>Diagnostic Tests</h2></div>
+    <div class="card yellow reveal"><h3>Prenatal Screening (Before Birth)</h3><div class="timeline"><div class="timeline-item"><h4>NIPT: Non-Invasive Prenatal Testing (Week 10 and up)</h4><p>This is a blood test taken from the mother. It looks for fetal DNA floating in her blood and can detect extra chromosome 21 material with over 99% accuracy. However, it is just a screening test. It can tell you if there is a high risk, but it cannot give you a definite yes or no answer on its own.</p></div><div class="timeline-item"><h4>First Trimester Screen (Weeks 10 to 13)</h4><p>This combines a blood test that measures two proteins (PAPP-A and hCG) with an ultrasound that measures fluid at the back of the baby's neck. Together, these two things give doctors a risk score for Down Syndrome.</p></div><div class="timeline-item"><h4>Amniocentesis (Weeks 15 to 20)</h4><p>A doctor uses a needle to take a small amount of fluid from the sac around the baby. They then look at the baby's chromosomes from the cells in that fluid. This is a diagnostic test, meaning it can give a definite answer. There is a very small risk of miscarriage, around 0.1 to 0.3%.</p></div><div class="timeline-item"><h4>Chorionic Villus Sampling (CVS) (Weeks 10 to 13)</h4><p>A small piece of placenta tissue is taken and the chromosomes are studied. Like amniocentesis, this gives a definitive answer, but it can be done earlier in the pregnancy. The miscarriage risk is slightly higher than with amniocentesis.</p></div></div></div>
+    <div class="card orange reveal"><h3>Testing After Birth and Carrier Testing</h3><ul><li><strong>Karyotype blood test</strong>: A blood sample is taken from the baby and doctors count the chromosomes. This is the standard way to confirm Down Syndrome after birth. Results usually come back in 1 to 2 weeks.</li><li><strong>Newborn screening panels</strong>: Down Syndrome is not included in the standard newborn blood spot screening in the U.S. But if a doctor notices the physical signs at birth, they will order a karyotype right away.</li><li><strong>Carrier testing</strong>: For Translocation Down Syndrome, parents can get karyotype tests to find out if one of them is a carrier. This is important for planning future pregnancies.</li></ul></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#F0FFF4;">💊</div><h2>Treatments and Therapies</h2></div>
+    <div class="stagger">
+      <div class="card purple"><h3>Is There a Cure?</h3><p>Right now, there is <strong>no cure</strong> for Down Syndrome. Since Trisomy 21 affects every single cell in the body from the very beginning of development, you cannot just remove the extra chromosome. But that does not mean there is nothing doctors can do. Early intervention and therapy make a huge difference in the quality of life for people with Down Syndrome.</p></div>
+      <div class="card blue"><h3>Early Intervention and Therapies (Super Important!)</h3><ul><li><strong>Speech-Language Therapy</strong>: Helps kids learn to talk and communicate. Most children with DS can develop strong communication skills with the right support</li><li><strong>Occupational Therapy</strong>: Teaches everyday skills like getting dressed, writing, and taking care of themselves. Also helps with fine motor skills</li><li><strong>Physical Therapy</strong>: Helps with low muscle tone and movement delays. Teaches kids how to sit up, walk, and move around</li><li><strong>Special Education Services</strong>: Schools create Individualized Education Plans (IEPs) that are designed specifically for each student's needs</li><li><strong>Behavioral Therapy</strong>: Helps kids manage anxiety, focus, and social situations</li></ul></div>
+      <div class="card green"><h3>Medical Treatments for Related Conditions</h3><ul><li><strong>Heart surgery</strong>: Used to fix congenital heart defects like AVSD. This is usually done in the first year of life</li><li><strong>Thyroid medication</strong>: A drug called Levothyroxine is used to treat hypothyroidism</li><li><strong>CPAP machine</strong>: Used for obstructive sleep apnea to help with breathing during sleep</li><li><strong>Cancer treatment</strong>: Standard leukemia treatments are used, and interestingly, kids with DS actually tend to respond better to certain chemotherapy drugs</li><li><strong>Hearing aids and glasses</strong>: Used to help with vision and hearing problems</li><li><strong>Dietary changes</strong>: For managing celiac disease</li></ul></div>
+      <div class="card pink"><h3>🔬 Current Research and Gene Therapy</h3><p>There is no gene therapy for Down Syndrome yet, but scientists are working on some really interesting ideas:</p><ul style="margin-top:0.8rem;"><li><strong>DYRK1A inhibitors</strong>: Drugs that try to reduce the activity of the overproduced DYRK1A gene. Clinical trials are happening right now.</li><li><strong>Chromosome 21 silencing</strong>: Scientists are looking into whether a gene called XIST could be used to silence the extra chromosome 21.</li><li><strong>Alzheimer's prevention trials</strong>: Since nearly everyone with DS develops Alzheimer's, they are an important group for testing anti-Alzheimer's treatments.</li><li><strong>DS-Connect Registry</strong>: The NIH created an online registry that connects families with researchers so that clinical trials can recruit participants more easily.</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div id="p3" class="page">
+  <div class="page-banner banner-p3"><h1>👤 Who Is Affected and Real Stories</h1><p>The numbers, the faces, and what it is actually like to live with Down Syndrome.</p></div>
+  <div class="container">
+    <div class="sh reveal"><div class="icon" style="background:#E8F4FD;">📊</div><h2>Incidence and Prevalence</h2></div>
+    <div class="stat-grid reveal">
+      <div class="stat-pill" style="background:var(--orange);"><span class="number">1 in 700</span><span class="label">Babies born with Down Syndrome in the U.S.</span></div>
+      <div class="stat-pill" style="background:var(--blue);"><span class="number counter" data-target="6000">0</span><span class="label">New U.S. cases per year</span></div>
+      <div class="stat-pill" style="background:var(--green);"><span class="number">200,000+</span><span class="label">People living with DS in the U.S.</span></div>
+      <div class="stat-pill" style="background:var(--purple);"><span class="number">6 million+</span><span class="label">People affected worldwide</span></div>
+    </div>
+    <div class="card blue reveal"><h3>Who Gets Down Syndrome?</h3><p>Down Syndrome can happen to anyone, no matter their race, ethnicity, or background. It is not caused by anything the parents did before or during pregnancy. The biggest risk factor is the age of the mother. The older she is, the more likely it is that nondisjunction will happen during meiosis, since older eggs are more prone to making that mistake.</p><br><p>But here is something interesting: even though older mothers have a higher risk per pregnancy, most babies with Down Syndrome are actually born to mothers under 35. That is just because younger women have way more pregnancies overall. Down Syndrome shows up across all racial and demographic groups in pretty similar numbers.</p><br><p>Estimated U.S. population breakdown (2010 estimates):</p><ul style="margin-top:0.5rem;"><li>Non-Hispanic White: about 138,000 people with DS</li><li>Hispanic: about 33,000</li><li>Non-Hispanic Black: about 27,000</li><li>Asian/Pacific Islander: about 7,000</li></ul></div>
+    <div class="card orange reveal"><h3>Carrier Frequency</h3><p>For regular Trisomy 21 (the most common type), there are no carriers. It happens randomly and does not run in families. But for <strong>Translocation Down Syndrome</strong>, a parent can carry the rearranged chromosome without having any symptoms themselves. If that parent is a carrier, there is about a 25% chance of having a child with Down Syndrome in each pregnancy. That is why doctors recommend genetic counseling and karyotype testing for parents when a child is diagnosed with the translocation type.</p></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#FFF0F6;">⭐</div><h2>A True Story: Chris Burke</h2></div>
+    <div class="story-hero reveal">
+      <div class="story-avatar">👨‍🎤</div>
+      <div><h3>Chris Burke: Actor and Advocate</h3><p>Born August 26, 1965, in New York City. Diagnosed with Down Syndrome at birth. Professional actor, musician, and national disability advocate.</p></div>
+    </div>
+    <div class="stagger">
+      <div class="card green"><h3>Background and Diagnosis</h3><p>Chris Burke was born in New York City in 1965. He was the fourth child of Frank and Marian Burke. When he was born, doctors told his parents to put him in an institution. His family said no. They were determined to raise Chris at home and make sure he had every chance to learn and grow. They enrolled him in schools and programs that most kids with Down Syndrome were not getting access to back then. That decision changed everything for him.</p></div>
+      <div class="card blue"><h3>A Day in His Life: Challenges and Triumphs</h3><p>Growing up, Chris had a hard time in school. He needed extra help learning to read, write, and communicate. He worked with speech therapists and special education teachers for years. But he had one big dream: he wanted to be an actor. Even when people doubted him, he kept going after it.</p><br><p>It paid off. He was cast as <strong>Charles "Corky" Thatcher</strong> on the ABC drama series <em>Life Goes On</em>, which aired from 1989 to 1993. That made him one of the first people with Down Syndrome to ever have a lead role on a major TV show. To do that job, he had to memorize lines, keep a professional schedule, work with a whole cast and crew, and handle heavy emotional storylines. That is not easy for anyone, and he did it with Down Syndrome.</p><br><p>On top of acting, Chris plays music with his band and travels the country as a motivational speaker. He keeps up with his health through regular doctor visits to monitor his heart and thyroid, which are common concerns for people with Down Syndrome.</p></div>
+      <div class="card orange"><h3>Impact on His Family</h3><p>Chris's parents, Frank and Marian Burke, were not just supportive parents. They became real advocates for disability rights. They fought against the idea that people with Down Syndrome should be hidden away, and instead pushed for inclusion in schools, communities, and media. His siblings grew up as strong supporters too. The whole family's story helped change how people think about what someone with Down Syndrome can do.</p><br><p>Raising a child with Down Syndrome takes a lot of time, energy, and money. Early therapy, doctor visits, specialized education, and ongoing medical care all add up. The Burke family shows both the hard parts and the amazing rewards that come from fully supporting someone with Down Syndrome.</p></div>
+      <div class="card purple"><h3>Support Systems</h3><p>Chris has had a lot of people in his corner throughout his life:</p><ul style="margin-top:0.5rem;"><li><strong>Medical:</strong> Regular checkups with heart doctors, thyroid specialists, and neurologists</li><li><strong>Educational:</strong> Special education programs and inclusive schools that gave him a real chance</li><li><strong>Community:</strong> The National Down Syndrome Society (NDSS), where Chris serves as a goodwill ambassador</li><li><strong>Professional:</strong> Casting directors, producers, and managers who saw his talent and believed in him</li><li><strong>Family:</strong> A family that never once gave up on him or let his diagnosis define his future</li></ul></div>
+    </div>
+
+    <div class="quote-box reveal">
+      <span class="sparkle">✨</span><span class="sparkle">⭐</span><span class="sparkle">💫</span>
+      <p>"People with Down Syndrome can do almost anything they put their minds to."</p>
+      <div class="attribution">Chris Burke, Actor and National Down Syndrome Society Goodwill Ambassador</div>
+    </div>
+
+    <div class="card yellow reveal"><p style="font-size:0.85rem;color:#555;"><em>Image Caption: Chris Burke is best known for playing Corky on the ABC series Life Goes On (1989 to 1993). He was one of the first actors with Down Syndrome to star in a lead role on a major network TV drama. Photo attribution: ABC Television Network / Public domain (historical broadcast media).</em></p></div>
+
+    <div class="sh reveal" style="margin-top:2rem;"><div class="icon" style="background:#E8F4FD;">🌊</div><h2>Also Worth Knowing: Karen Gaffney</h2></div>
+    <div class="card blue reveal"><h3>Karen Gaffney: Open Water Swimmer and Disability Rights Activist</h3><p>Karen Gaffney grew up in Portland, Oregon, and has Down Syndrome. She became the first person with DS to take part in a relay swim across the English Channel. She is also the president of the Karen Gaffney Foundation, an organization that works to make sure people with Down Syndrome and other developmental disabilities are included in society. She earned an honorary doctorate from the University of Portland and speaks to audiences all over the world. Her story is proof that Down Syndrome does not put a ceiling on what a person can accomplish.</p><br><p><em>Image Caption: Karen Gaffney at the 2012 Disability Rights Advocate event. Photo courtesy of the Karen Gaffney Foundation. Used for educational purposes.</em></p></div>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div id="p4" class="page">
+  <div class="page-banner banner-p4"><h1>📚 Works Cited</h1><p>All sources used in this website, formatted in APA.</p></div>
+  <div class="container">
+    <div class="sh reveal"><div class="icon" style="background:#F5F0FF;">📋</div><h2>Sources (APA Format)</h2></div>
+    <div class="source-card reveal"><div class="source-num" style="background:var(--orange);">1</div><div><p><strong>Centers for Disease Control and Prevention.</strong> (2026, January 9). <em>Down syndrome.</em> U.S. Department of Health and Human Services. <a href="https://www.cdc.gov/birth-defects/about/down-syndrome.html" target="_blank">https://www.cdc.gov/birth-defects/about/down-syndrome.html</a><br><em>Accessed: May 5, 2026. Government source (.gov) ✅</em></p></div></div>
+    <div class="source-card reveal" style="border-left-color:var(--blue);"><div class="source-num" style="background:var(--blue);">2</div><div><p><strong>National Institute of Child Health and Human Development.</strong> (n.d.). <em>About Down syndrome.</em> National Institutes of Health. <a href="https://www.nichd.nih.gov/health/topics/factsheets/downsyndrome" target="_blank">https://www.nichd.nih.gov/health/topics/factsheets/downsyndrome</a><br><em>Accessed: May 5, 2026. Government source (.gov) ✅</em></p></div></div>
+    <div class="source-card reveal" style="border-left-color:var(--green);"><div class="source-num" style="background:var(--green);">3</div><div><p><strong>Centers for Disease Control and Prevention.</strong> (2024, November 22). <em>Living with Down syndrome.</em> U.S. Department of Health and Human Services. <a href="https://www.cdc.gov/birth-defects/living-with-down-syndrome/index.html" target="_blank">https://www.cdc.gov/birth-defects/living-with-down-syndrome/index.html</a><br><em>Accessed: May 5, 2026. Government source (.gov) ✅</em></p></div></div>
+    <div class="source-card reveal" style="border-left-color:var(--purple);"><div class="source-num" style="background:var(--purple);">4</div><div><p><strong>Antonarakis, S. E., Skotko, B. G., Rafii, M. S., Strydom, A., Pape, S. E., Bianchi, D. W., Sherman, S. L., &amp; Reeves, R. H.</strong> (2020). Down syndrome. <em>Nature Reviews Disease Primers, 6</em>(9). National Center for Biotechnology Information, NIH. <a href="https://pubmed.ncbi.nlm.nih.gov/32029743/" target="_blank">https://pubmed.ncbi.nlm.nih.gov/32029743/</a><br><em>Accessed: May 5, 2026. Peer-reviewed journal article ✅</em></p></div></div>
+    <div class="source-card reveal" style="border-left-color:var(--pink);"><div class="source-num" style="background:var(--pink);">5</div><div><p><strong>Kazemi, M., Salehi, M., &amp; Kheirollahi, M.</strong> (2016). Down syndrome: Current status, challenges and future perspectives. <em>International Journal of Molecular and Cellular Medicine, 5</em>(3), 125-133. PubMed Central. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5125364/" target="_blank">https://pmc.ncbi.nlm.nih.gov/articles/PMC5125364/</a><br><em>Accessed: May 5, 2026. Peer-reviewed journal article ✅</em></p></div></div>
+    <div class="source-card reveal" style="border-left-color:var(--yellow);"><div class="source-num" style="background:var(--orange);">6</div><div><p><strong>Weijerman, M. E., &amp; de Winter, J. P.</strong> (2010). Clinical practice: The care of children with Down syndrome. <em>European Journal of Pediatrics, 169</em>(12), 1445-1452. StatPearls, NIH. <a href="https://www.ncbi.nlm.nih.gov/books/NBK526016/" target="_blank">https://www.ncbi.nlm.nih.gov/books/NBK526016/</a><br><em>Accessed: May 5, 2026. Peer-reviewed / NIH source ✅</em></p></div></div>
+
+
+  </div>
+</div>
+
+
+
+<script>
+// PAGE SWITCH
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>{doReveal();doCounters();},120);
+}
+
+// SCROLL REVEAL
+function doReveal(){
+  document.querySelectorAll('.page.active .reveal,.page.active .reveal-l,.page.active .reveal-r,.page.active .sh,.page.active .stagger').forEach((el,i)=>{
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight-50){
+      el.style.transitionDelay=(i*0.04)+'s';
+      el.classList.add('vis');
+    }
+  });
+}
+window.addEventListener('scroll',doReveal,{passive:true});
+doReveal();
+
+// COUNTERS
+function doCounters(){
+  document.querySelectorAll('.page.active .counter').forEach(el=>{
+    if(el.dataset.done) return;
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight){
+      el.dataset.done=1;
+      const target=+el.dataset.target;
+      const dur=1600;
+      const inc=target/(dur/16);
+      let cur=0;
+      const t=setInterval(()=>{
+        cur+=inc;
+        if(cur>=target){cur=target;clearInterval(t);}
+        el.textContent=Math.floor(cur).toLocaleString();
+      },16);
+    }
+  });
+}
+window.addEventListener('scroll',doCounters,{passive:true});
+setTimeout(()=>{doReveal();doCounters();},350);
+
+// RIPPLE
+document.addEventListener('click',e=>{
+  const el=e.target.closest('.card,.stat-pill');
+  if(!el) return;
+  const r=document.createElement('span');
+  r.className='ripple';
+  const rect=el.getBoundingClientRect();
+  const s=Math.max(rect.width,rect.height);
+  r.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-rect.left-s/2}px;top:${e.clientY-rect.top-s/2}px;`;
+  el.appendChild(r);
+  setTimeout(()=>r.remove(),700);
+});
+
+// STAGGERED TAG ANIMATION DELAYS
+document.querySelectorAll('.tag').forEach((t,i)=>{t.style.animationDelay=(i*0.06)+'s';});
+
+// FLOATING PARTICLES
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H;
+const COLS=['#FFD93D','#FF6B6B','#4D96FF','#6BCB77','#C77DFF','#FF9EBB'];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+class P{
+  constructor(){this.reset(true);}
+  reset(rand){
+    this.x=Math.random()*W;
+    this.y=rand?Math.random()*H:H+10;
+    this.r=Math.random()*5+2;
+    this.vy=-(Math.random()*0.5+0.15);
+    this.vx=(Math.random()-0.5)*0.2;
+    this.col=COLS[Math.floor(Math.random()*COLS.length)];
+    this.a=Math.random()*0.45+0.08;
+    this.wo=Math.random()*Math.PI*2;
+    this.ws=(Math.random()-0.5)*0.015;
+  }
+  tick(){this.wo+=this.ws;this.x+=this.vx+Math.sin(this.wo)*0.25;this.y+=this.vy;if(this.y<-10)this.reset();}
+  draw(){ctx.save();ctx.globalAlpha=this.a;ctx.fillStyle=this.col;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();ctx.restore();}
+}
+const pts=Array.from({length:70},()=>new P());
+function anim(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.tick();p.draw();});requestAnimationFrame(anim);}
+anim();
+
+// COLORFUL CURSOR TRAIL
+const wrap=document.getElementById('cursorWrap');
+const DOTS=[];
+for(let i=0;i<10;i++){
+  const d=document.createElement('div');
+  d.className='cursor-dot';
+  const size=10-i;
+  d.style.cssText=`width:${size}px;height:${size}px;background:${COLS[i%COLS.length]};opacity:${1-i/12};z-index:9999;`;
+  wrap.appendChild(d);
+  DOTS.push({el:d,x:0,y:0});
+}
+let mx=0,my=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
+function trail(){
+  let px=mx,py=my;
+  DOTS.forEach((d,i)=>{
+    const ease=0.28-i*0.018;
+    d.x+=(px-d.x)*ease;d.y+=(py-d.y)*ease;
+    d.el.style.left=(d.x-5)+'px';d.el.style.top=(d.y-5)+'px';
+    px=d.x;py=d.y;
+  });
+  requestAnimationFrame(trail);
+}
+trail();
+</script>
+</body>
+</html>
